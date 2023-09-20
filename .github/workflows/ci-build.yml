@@ -25,6 +25,8 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
+      - run: yarn cap add android
+
       - name: Capacitor update
         run: yarn cap run android -l --external
 
