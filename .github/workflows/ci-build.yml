@@ -28,7 +28,10 @@ jobs:
       - run: yarn cap add android
 
       - name: Capacitor update
-        run: yarn cap run android -l --external
+        run: npx cap update
+
+      - name: Capacitor copy
+        run: npx cap copy
 
       - name: Build app bundle
         run: cd android && ./gradlew bundle
