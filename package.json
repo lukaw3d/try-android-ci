@@ -1,0 +1,103 @@
+{
+  "$schema": "https://raw.githubusercontent.com/lukaw3d/parcel-bundler-json-schemas/main/package_schema.json",
+  "name": "@oasisprotocol/oasis-wallet",
+  "version": "0.0.0-development",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/oasisprotocol/oasis-wallet-web.git"
+  },
+  "scripts": {
+    "build": "node ./internals/scripts/build-web.js",
+    "build:ext": "node ./internals/scripts/build-ext.js",
+    "clean": "rm -rf build/ .parcel-cache",
+    "clean:ext": "rm -rf build-ext/ .parcel-cache",
+    "start": "REACT_APP_META_CSP= HMR_PORT=2222 EXTENSION_CSP=`yarn -s print-extension-dev-csp` parcel --host localhost --port 3000 --dist-dir build-dev",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run",
+    "test": "jest --color",
+    "test:watch": "yarn run test --watch",
+    "start:prod": "yarn run build && node ./internals/scripts/serve-prod.js",
+    "checkTs": "tsc --noEmit",
+    "lint": "eslint --ext js,ts,tsx ./",
+    "lint:fix": "yarn run lint --fix",
+    "lint:css": "stylelint src/**/*.css",
+    "lint-git": "node ./internals/scripts/gitlint.js",
+    "lint-docs": "markdownlint --ignore '**/node_modules/**' '**/*.md'",
+    "extract-messages": "rm src/locales/en/translation.json && i18next-scanner --config=internals/extractMessages/i18next-scanner.config.js",
+    "fix-grommet-icons-types": "node ./internals/scripts/fix-grommet-icons-types.js",
+    "print-extension-dev-csp": "node ./internals/scripts/print-extension-dev-csp.js",
+    "android": "yarn build && yarn cap run android -l --external",
+    "ios": "yarn build && yarn cap run ios -l --external"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all",
+      "not ios_saf < 13",
+      "not android <= 4.4.4",
+      "not ie <= 11"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version",
+      "not ios_saf < 13"
+    ]
+  },
+  "nyc": {
+    "exclude": [
+      "src/vendors",
+      "**/vendors/**"
+    ],
+    "excludeAfterRemap": true,
+    "report-dir": "cypress-coverage"
+  },
+  "dependencies": {
+    "@capacitor-community/bluetooth-le": "3.0.0",
+    "@capacitor/android": "5.0.4",
+    "@capacitor/core": "5.0.4",
+    "@capacitor/ios": "5.0.4"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "5.0.4"
+  },
+  "resolutions": {
+    "@ledgerhq/hw-transport": "^6.27.6",
+    "@testing-library/dom": "9.3.1",
+    "@typescript-eslint/eslint-plugin": "6.7.0",
+    "bip39": "3.1.0",
+    "eslint-plugin-react": "7.33.2",
+    "grommet-icons": "4.11.0",
+    "typescript": "5.2.2",
+    "protobufjs": "7.2.5"
+  },
+  "//": "Parcel doesn't support subpath patterns #7840. We need an alias for @ledgerhq/devices",
+  "alias": {
+    "@ledgerhq/devices": "@ledgerhq/devices/lib-es",
+    "locales": "./src/locales",
+    "utils": "./src/utils",
+    "app": "./src/app",
+    "types": "./src/types",
+    "styles": "./src/styles",
+    "config": "./src/config",
+    "store": "./src/store",
+    "vendors": "./src/vendors"
+  },
+  "targets": {
+    "// see also .parcelrc and .terserrc": {},
+    "web": {
+      "source": "public/index.html",
+      "distDir": "./build",
+      "context": "browser",
+      "scopeHoist": false
+    },
+    "// https://parceljs.org/recipes/web-extension/#hmr": {},
+    "ext": {
+      "source": "public/manifest.json",
+      "distDir": "./build-ext",
+      "scopeHoist": false
+    }
+  }
+}
