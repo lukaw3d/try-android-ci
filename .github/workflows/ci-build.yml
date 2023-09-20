@@ -26,11 +26,7 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Capacitor update
-        run: npx cap update
-
-      - name: Capacitor copy
-        run: npx cap copy
-
+        run: yarn cap run android -l --external
 
       - name: Build app bundle
         run: cd android && ./gradlew bundle
