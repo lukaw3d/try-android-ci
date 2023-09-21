@@ -27,6 +27,7 @@ jobs:
 
       - run: yarn cap add android
 
+      # https://dev.to/khromov/build-your-capacitor-android-app-bundle-using-github-actions-24do
       - name: Capacitor update
         run: npx cap update
 
@@ -44,17 +45,18 @@ jobs:
       - name: Upload release bundle
         uses: actions/upload-artifact@v3
         with:
-          name: app-release.aab
+          name: app-release
           path: android/app/build/outputs/bundle/release/app-release.aab
           retention-days: 60
 
       - name: Upload signed release bundle
         uses: actions/upload-artifact@v3
         with:
-          name: app-release-signed.aab
+          name: app-release-signed
           path: android/app/build/outputs/bundle/release/app-release-signed.aab
           retention-days: 60
 
+      # https://github.com/mukeshsolanki/bundletool-action/tree/main
       - name: Convert aab to apk
         id: convert_aab
         uses: mukeshsolanki/bundletool-action@v1.0.2
@@ -68,5 +70,5 @@ jobs:
 
       - uses: actions/upload-artifact@v3
         with:
-          name: release-apk.apk
+          name: release-apk
           path: ${{ steps.convert_aab.outputs.apkPath }}
